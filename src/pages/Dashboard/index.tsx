@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 import {
@@ -25,6 +26,7 @@ export interface Character {
 
 const Dashboard: React.FC = () => {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [data, setData] = useState<Data | null>(null);
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -32,18 +34,17 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     api.get(`/people?page=${page}`).then((response) => {
 
+      setCharacters([...characters, ...response.data?.results]);
       setData(response.data);
-      setCharacters([...characters, ...data?.results]);
+      setLoading(false);
     });
   }, [page]);
 
   const loadMore = () => {
-    // let length = data?.length;
     const next = data?.next;
     if (next === null) return;
     let pageNumber = page + 1;
     setPage(pageNumber);
-
   };
 
   const handleSelectCharacter = useCallback(
@@ -63,14 +64,14 @@ const Dashboard: React.FC = () => {
 
       <CharactersList
         data={characters}
-        keyExtractor={(characters) => characters.url}
+        keyExtractor={(_characters, index) => index.toString()}
         renderItem={({ item: characters }) => (
           <CharacterContainer onPress={() => handleSelectCharacter(characters.url)}>
             <CharacterName>{characters.name}</CharacterName>
           </CharacterContainer>
         )}
         onEndReached={loadMore}
-        onEndReachedThreshold={0.09}
+        onEndReachedThreshold={0.1}
       />
     </Container>
   );

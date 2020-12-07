@@ -30,12 +30,26 @@ export const CharacterInfo = styled.Text`
   padding: 8px 16px 8px 16px;
 `;
 
+export const CardList = styled.View`
+  padding-top: 8px;
+  background: #3e3b47;
+  border-radius: 10px;
+  margin-left: 16px;
+  margin-right: 16px;
+`;
+
+export const TitleCard = styled.Text`
+  font-family: 'RobotoSlab-Medium';
+  font-size: 18px;
+  color: #f4ede8;
+  margin-left: 130px
+
+`;
+
 export const FilmList = styled(
   FlatList as new () => FlatList<Film>,
-).attrs({
-  contentContainerStyle: {
-    paddingTop: 16,
-    paddingBottom: 16,
-    paddingHorizontal: 24,
-  },
-})``;
+).attrs({})``;
+
+export const ButtonPadding = styled.View`
+  padding: 16px;
+`;
